@@ -1,0 +1,16 @@
+.\venv\Scripts\activate
+
+
+ZAD 5
+(random)
+python .\ex5_argparse.py random SO2 24g 2023-03-01 2023-06-01
+python .\ex5_typer.py random SO2 24g 2023-03-01 2023-06-01
+
+(station)
+python ex5_argparse.py station SO2 24g 2023-03-01 2023-06-01 --station_name "Śnieżka"
+python ex5_typer.py station SO2 24g 2023-03-01 2023-06-01 --station-name "Śnieżka"
+
+(anomalies)
+python .\ex5_argparse.py anomalies SO2 24g 2023-03-01 2024-07-01 --station_name "Śnieżka"
+python .\ex5_typer.py anomalies SO2 24g 2023-03-01 2024-07-01 --station-name "Śnieżka"
+
