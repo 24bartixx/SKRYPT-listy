@@ -24,6 +24,9 @@ MEASUREMENTS_TIME = "time"
 MEASUREMENTS_VALUE = "value"
 MEASUREMENTS_YEAR = "chuj"
 
+# ex 2
+KEY_TUPLE_PATTERN = r"(\d{4})_(.+)_(.+).csv"
+
 # ex 3
 DEFAULT_CITY = "Wrocław"
 
