@@ -25,7 +25,7 @@ MEASUREMENTS_VALUE = "value"
 MEASUREMENTS_YEAR = "time"
 
 # ex 2
-KEY_TUPLE_PATTERN = r"(\d{4})_(.+)_(.+).csv"
+KEY_TUPLE_PATTERN = r"(\d{4})_(.+)_(.+)/.csv"
 
 # ex 3
 DEFAULT_CITY = "Wrocław"
@@ -141,22 +141,3 @@ def logger(name = "logger"):
         logger.addHandler(stderr_handler)
     
     return logger
-
-
-class A:
-    def __init__(self, x):
-        self.x = x
-        
-class B:
-    def __init__(self, x):
-        self.x = x
-        
-        
-class C(A,B):
-    def __init__(self, x):
-        A.__init__(self, x)
-        B.__init__(self, x)
-        
-c = C(4)
-
-c.x

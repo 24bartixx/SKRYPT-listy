@@ -19,7 +19,6 @@ def random_command(
     start_date = typer.Argument(..., callback = valid_date, help = "Start date of the measurement (format: yyyy-mm-dd)"),
     end_date = typer.Argument(..., callback = valid_date, help = "End date of the measurement (format: yyyy-mm-dd)")
 ):
-
     result = random_station_name(measurement, frequency, start_date, end_date)
     print("\n\tResult: ", result, "\n")
     

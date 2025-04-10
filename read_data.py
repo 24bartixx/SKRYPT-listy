@@ -161,8 +161,8 @@ def read_data(metadata_path = METADATA_FILE_PATH, measurements_catalog_path = ME
     
     data =  {}
     
-    data |= read_metadata(metadata_path, should_save = True)
-    data |= read_measurements(measurements_catalog_path, should_save = True)
+    data |= read_metadata(metadata_path, should_save = should_save)
+    data |= read_measurements(measurements_catalog_path, should_save)
     
     if should_save:
         save_to_json(data, DATA_RESULT_PATH)
