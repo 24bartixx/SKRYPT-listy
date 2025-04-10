@@ -22,7 +22,7 @@ MEASUREMENTS_UNIT = "unit"
 MEASUREMENTS_POSITION_CODE = "position_code"
 MEASUREMENTS_TIME = "time"
 MEASUREMENTS_VALUE = "value"
-MEASUREMENTS_YEAR = "chuj"
+MEASUREMENTS_YEAR = "time"
 
 # ex 2
 KEY_TUPLE_PATTERN = r"(\d{4})_(.+)_(.+).csv"
