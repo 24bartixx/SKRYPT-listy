@@ -19,7 +19,7 @@ def safe_parse_date(date_str):
         return date_str
 
 
-def time_series_list_from_csv1(csv_path):
+def time_series_list_from_csv_transpose(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -57,7 +57,7 @@ def time_series_list_from_csv1(csv_path):
         raise FileNotFoundError(f"The path {csv} is not csv file.")
 
 
-def time_series_list_from_csv2(csv_path):
+def time_series_list_from_csv_list(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -96,7 +96,7 @@ def time_series_list_from_csv2(csv_path):
         raise FileNotFoundError(f"The path {csv} is not csv file.")
     
     
-def time_series_list_from_csv3(csv_path):
+def time_series_list_from_csv_deque(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -194,9 +194,9 @@ def test(should_test_getitem = False):
     path = Path(args.path) if args.path else CSV_DEFAULT_PATH
     should_test_getitem = args.should_test_getitem
     
-    test_function(time_series_list_from_csv1, path, should_test_getitem)
-    test_function(time_series_list_from_csv2, path, should_test_getitem)
-    test_function(time_series_list_from_csv3, path, should_test_getitem)
+    test_function(time_series_list_from_csv_transpose, path, should_test_getitem)
+    test_function(time_series_list_from_csv_list, path, should_test_getitem)
+    test_function(time_series_list_from_csv_deque, path, should_test_getitem)
     
     
 if __name__ == "__main__":

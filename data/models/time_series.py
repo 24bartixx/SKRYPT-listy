@@ -55,6 +55,26 @@ class TimeSeries:
             raise TypeError(f"Invalid parameter type: {type(param)}")
         
     @property
+    def indicator(self):
+        return self.__indicator
+    
+    @property
+    def station_code(self):
+        return self.__station_code
+    
+    @property
+    def averaging_time(self):
+        return self.__averaging_time
+        
+    @property
+    def values(self):
+        return self.__values
+        
+    @property
+    def dates(self):
+        return self.__dates
+        
+    @property
     def mean(self):
         return mean(self.__values) if self.__values else None
 
@@ -62,3 +82,5 @@ class TimeSeries:
     def stddev(self):
         return stdev(self.__values) if len(self.__values) > 0 else 0.0
         
+        
+    
