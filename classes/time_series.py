@@ -76,7 +76,8 @@ class TimeSeries:
         
     @property
     def mean(self):
-        return mean([value for value in self.__values if isinstance(value, float)]) if self.__values else None
+        values = [value for value in self.__values if isinstance(value, float)]
+        return mean(values) if values else None
 
     @property
     def stddev(self):
