@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from ..models.time_series import TimeSeries
+from classes.time_series import TimeSeries
 
 
 class SeriesValidator(ABC):
@@ -23,7 +23,7 @@ class OutlierDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} on {series.dates[i]} exceeded standard deviation" 
             for i in range(len(series.values)) 
-            if abs(series.values[i] - mean) <= stddev * self.k
+            if isinstance(series.values[i], float) and abs(series.values[i] - mean) <= stddev * self.k
         ]
         
     
@@ -37,7 +37,7 @@ class ThresholdDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} exceeded threshold {self.threshold} on {series.dates[i]}"
             for i in range(len(series.values))
-            if series.values[i] > self.threshold
+            if isinstance(series.values[i], float) and series.values[i] > self.threshold
         ]
         
         
@@ -49,21 +49,28 @@ class ZeroSpikeDetector(SeriesValidator):
         invalid = []
         
         for i in range(len(series.values)):
-            if not series.values[i]:
+            if not series.values[i] or not isinstance(series.values[i], float):
                 invalid.append(i)
             elif invalid:
                 if len(invalid) >= 3:
                     msgs = []
                     for j in invalid:
                         msgs.append(f"({series.dates[j]}, {series.values[j]})")
-                    messages.append("Consecutive invalid values:" + ", ".join(msgs))
+                    messages.append("Consecutive invalid values: " + ", ".join(msgs))
                 invalid = []
                 
         if len(invalid) >= 3:
             msgs = []
             for i in invalid:
                 msgs.append(f"({series.dates[i]}, {series.values[i]})")
-            messages.append("Consecutive invalid values:" + ", ".join(msgs))
+            messages.append("Consecutive invalid values:"  + ", ".join(msgs))
                 
         return messages
+        
+        
+class SimpleValidator:
+    
+    def analyze(self, series: TimeSeries) -> List[str]:
+        
+        return [f"Info: {series.indicator} {series.averaging_time} at {series.station_code} has mean = {series.mean}"]
         

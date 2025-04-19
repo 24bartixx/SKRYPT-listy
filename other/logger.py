@@ -1,9 +1,6 @@
 import sys
 import logging
 
-# Constants
-
-
 def logger(name = "logger"):
     
     logger = logging.getLogger(name)

@@ -1,5 +1,5 @@
 from datetime import datetime
-from utils import logger
+from ..other.logger import logger
 
 log = logger()
 

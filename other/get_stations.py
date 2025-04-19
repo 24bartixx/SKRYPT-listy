@@ -1,12 +1,12 @@
 import csv
-from ..models.station import Station
+from ..classes.station import Station
 from pathlib import Path
-from utils import logger
+from logger import logger
 
 log = logger()
 
 
-def stations_from_csv(csv_path = Path.cwd() / "data" / "csv" / "stacje.csv"):
+def get_stations(csv_path = Path.cwd() / "data" / "csv" / "stacje.csv"):
 
     if csv_path.is_file() and csv_path.suffix == ".csv":
         
@@ -29,4 +29,4 @@ def stations_from_csv(csv_path = Path.cwd() / "data" / "csv" / "stacje.csv"):
         raise FileNotFoundError(f"The path {csv} is not csv file.")
             
 if __name__ == "__main__":
-    stations_from_csv()
+    get_stations()

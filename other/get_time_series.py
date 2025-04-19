@@ -1,14 +1,14 @@
 import csv
-from ..models.time_series import TimeSeries
+from classes.time_series import TimeSeries
 from pathlib import Path
 from datetime import datetime
 from collections import deque
-from utils import logger
+from other.logger import logger
 import argparse
 import timeit
 
 
-CSV_DEFAULT_PATH = Path("data/csv/measurements/2023_Hg(TGM)_1g.csv")
+CSV_DEFAULT_PATH = Path("data/measurements/2023_Hg(TGM)_1g.csv")
 log = logger()
 
 
@@ -17,9 +17,16 @@ def safe_parse_date(date_str):
         return datetime.strptime(date_str, "%m/%d/%y %H:%M")
     except ValueError:
         return date_str
+    
+    
+def safe_parse_float(value_str):
+    try:
+        return float(value_str)
+    except ValueError:
+        return value_str
 
 
-def time_series_list_from_csv_transpose(csv_path):
+def get_time_series_transpose(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -45,8 +52,9 @@ def time_series_list_from_csv_transpose(csv_path):
         
         transposed[0] = list(map(safe_parse_date, transposed[0]))
         
+        
         series = [
-            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], transposed[0], transposed[i+1])
+            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], transposed[0], list(map(safe_parse_float, transposed[i+1])))
             for i in range(count)
         ]
             
@@ -57,7 +65,7 @@ def time_series_list_from_csv_transpose(csv_path):
         raise FileNotFoundError(f"The path {csv} is not csv file.")
 
 
-def time_series_list_from_csv_list(csv_path):
+def get_times_series_list(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -85,7 +93,7 @@ def time_series_list_from_csv_list(csv_path):
         measurements[0] = list(map(safe_parse_date, measurements[0]))
         
         series = [
-            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], measurements[0], measurements[i + 1])
+            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], measurements[0], list(map(safe_parse_float, measurements[i + 1])))
             for i in range(len(station_codes))
         ]
             
@@ -96,7 +104,7 @@ def time_series_list_from_csv_list(csv_path):
         raise FileNotFoundError(f"The path {csv} is not csv file.")
     
     
-def time_series_list_from_csv_deque(csv_path):
+def get_time_series_deque(csv_path):
     
     if not isinstance(csv_path, Path):
         csv_path = Path(csv_path)
@@ -124,7 +132,7 @@ def time_series_list_from_csv_deque(csv_path):
         measurements[0] = list(map(safe_parse_date, measurements[0]))
         
         series = [
-            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], measurements[0], list(measurements[i + 1]))
+            TimeSeries(station_codes[i], indicators[i], averaging_times[i], units[i], measurements[0], list(map(safe_parse_float, measurements[i + 1])))
             for i in range(len(station_codes))
         ]
             
@@ -194,9 +202,9 @@ def test(should_test_getitem = False):
     path = Path(args.path) if args.path else CSV_DEFAULT_PATH
     should_test_getitem = args.should_test_getitem
     
-    test_function(time_series_list_from_csv_transpose, path, should_test_getitem)
-    test_function(time_series_list_from_csv_list, path, should_test_getitem)
-    test_function(time_series_list_from_csv_deque, path, should_test_getitem)
+    test_function(get_time_series_transpose, path, should_test_getitem)
+    test_function(get_times_series_list, path, should_test_getitem)
+    test_function(get_time_series_deque, path, should_test_getitem)
     
     
 if __name__ == "__main__":

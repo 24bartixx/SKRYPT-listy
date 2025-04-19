@@ -1,6 +1,6 @@
 import csv
 from itertools import chain
-from ..repositories.time_series_list_from_csv import time_series_list_from_csv_transpose
+from ..other.get_time_series import get_time_series_transpose
 from series_validators import *
 
 class Measurements:
@@ -43,12 +43,12 @@ class Measurements:
     def __read_parameter(self, param_name):
         for path in self.paths:
             if not self.paths[path] and param_name in str(path):
-                self.time_series += time_series_list_from_csv_transpose(path)
+                self.time_series += get_time_series_transpose(path)
                 self.paths[path] = True
                 
     def __read_data(self):
         self.time_series += list(chain.from_iterable(
-            time_series_list_from_csv_transpose(path) 
+            get_time_series_transpose(path) 
             for path, already_read in self.paths.items()
             if not already_read
         ))
@@ -63,6 +63,9 @@ class Measurements:
         return [series for series in self.time_series if series.station_code == station_code]
     
     def detect_all_anomalies(self, validators: list[SeriesValidator], preload: bool = False):
+        
+        if preload:
+            self.__read_data()
         
         anomalies = {}
         
