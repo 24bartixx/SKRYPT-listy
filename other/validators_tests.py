@@ -20,8 +20,8 @@ def validators_tests(path = "data/measurements/2023_NO_1g.csv"):
     file_time_series = get_time_series_transpose(path)[0]
     
     validators = [
-        OutlierDetector(4),
-        ThresholdDetector(0),
+        OutlierDetector(5),
+        ThresholdDetector(1.6),
         ZeroSpikeDetector(),
         SimpleValidator()
     ]
@@ -29,6 +29,14 @@ def validators_tests(path = "data/measurements/2023_NO_1g.csv"):
     for validator in validators:
         print_result(validator.__class__.__name__, validator.analyze(file_time_series))
     print()
+    
+    print(validators[:-1])
+    
+    composite_or = CompositeValidator(validators[:-1], CompositeValidator.MODE.OR)
+    print_result(composite_or.__class__.__name__ + " (OR)", composite_or.analyze(file_time_series))
+    
+    composite_and = CompositeValidator(validators[:-2], CompositeValidator.MODE.AND)
+    print_result(composite_and.__class__.__name__ + " (AND)", composite_and.analyze(file_time_series))
     
     
 if __name__ == "__main__":
