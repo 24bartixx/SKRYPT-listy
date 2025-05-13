@@ -20,6 +20,7 @@ class HomeWidget(QMainWindow):
         self.display_data = None
         self.current_index = None
         self.model =  None
+        self.__updated_prev_next_button()
 
     def __load_ui(self):
         loader = QUiLoader()
@@ -74,7 +75,6 @@ class HomeWidget(QMainWindow):
             self.model = LogListModel(self.display_data)
             self.logs_list_view.setModel(self.model)
             
-        
     def __log_list_view_item_on_click(self, index):
         self.current_index = index.row()
         self.__populate_detail()
@@ -90,6 +90,7 @@ class HomeWidget(QMainWindow):
         self.__populate_detail()
         
     def __populate_detail(self):
+        self.__updated_prev_next_button()
         if self.current_index is not None:
             log = self.model.get_item(self.current_index)
             self.timestamp.setText(log[Fields.TIMESTAMP].strftime("%Y-%m-%d %H:%M:%S"))
@@ -121,6 +122,20 @@ class HomeWidget(QMainWindow):
             index, QItemSelectionModel.SelectCurrent
         )
         self.logs_list_view.scrollTo(index)
+    
+    def __updated_prev_next_button(self):
+        if self.current_index is None:
+            self.prev_button.setEnabled(False)
+            self.next_button.setEnabled(False)
+        else:
+            if self.current_index <= 0:
+                self.prev_button.setEnabled(False)
+            else:
+                self.prev_button.setEnabled(True)
+            if self.current_index + 1 >= len(self.display_data):
+                self.next_button.setEnabled(False)
+            else:
+                self.next_button.setEnabled(True)
     
     def __reset(self):
         self.current_index = None
