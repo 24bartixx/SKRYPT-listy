@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Qt Designer (jeśli generujesz .py z .ui, możesz chcieć wykluczyć .ui)
+*.ui
+*.qrc
+*.qmlc
+*.jsc
+
+# PyInstaller
+*.spec
+dist/
+build/
+
+# VSCode
+.vscode/
+
+# Środowisko wirtualne
+myenv/
+
+# Mac/Windows/Linux system files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Pyside6 generated UI files (opcjonalnie, jeśli generujesz .py z .ui)
+ui_*.py
