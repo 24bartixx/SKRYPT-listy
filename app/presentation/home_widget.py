@@ -17,6 +17,7 @@ class HomeWidget(QMainWindow):
         self.setFixedSize(self.ui.size())
         
         self.data = None
+        self.display_data = None
         self.current_index = None
         self.model =  None
 
@@ -57,19 +58,20 @@ class HomeWidget(QMainWindow):
         
     def __get_new_data(self):
         self.data = read_log(self.path.text())
-        self.model = LogListModel(self.data)
+        self.display_data = self.data
+        self.model = LogListModel(self.display_data)
         self.logs_list_view.setModel(self.model)
         
     def __filter_data(self):
         if self.data:
             start = self.start_date.dateTime().toPython().replace(tzinfo=timezone.utc)
             end = self.end_date.dateTime().toPython().replace(tzinfo=timezone.utc)
-            filtered_data = list(filter(
+            self.display_data = list(filter(
                 lambda log: log[Fields.TIMESTAMP] >= start and log[Fields.TIMESTAMP] <= end,
                 self.data
             ))
             self.__reset()
-            self.model = LogListModel(filtered_data)
+            self.model = LogListModel(self.display_data)
             self.logs_list_view.setModel(self.model)
             
         
