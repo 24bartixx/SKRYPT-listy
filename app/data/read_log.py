@@ -1,8 +1,6 @@
 from pathlib import Path
 from datetime import datetime, timezone
-from ipaddress import ip_address
 from app.data.http_indexes import *
-from app.data.http_method import HTTP_method
 
 def read_log(path_str):
     path = Path(path_str)
