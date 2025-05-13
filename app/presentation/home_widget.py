@@ -1,6 +1,6 @@
 import os
 from datetime import timezone
-from PySide6.QtWidgets import QMainWindow, QPushButton, QLineEdit, QListView, QLabel, QDateTimeEdit
+from PySide6.QtWidgets import QMainWindow, QPushButton, QLineEdit, QListView, QLabel, QDateTimeEdit, QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QItemSelectionModel
 from app.data.read_log import read_log
@@ -58,10 +58,13 @@ class HomeWidget(QMainWindow):
         self.next_button.clicked.connect(self.__next_on_click)
         
     def __get_new_data(self):
-        self.data = read_log(self.path.text())
-        self.display_data = self.data
-        self.model = LogListModel(self.display_data)
-        self.logs_list_view.setModel(self.model)
+        try:
+            self.data = read_log(self.path.text())
+            self.display_data = self.data
+            self.model = LogListModel(self.display_data)
+            self.logs_list_view.setModel(self.model)
+        except FileNotFoundError:
+            self.__show_path_error()
         
     def __filter_data(self):
         if self.data:
@@ -136,6 +139,14 @@ class HomeWidget(QMainWindow):
                 self.next_button.setEnabled(False)
             else:
                 self.next_button.setEnabled(True)
+    
+    def __show_path_error(self):
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Information)
+        message.setText("Given path is not a .log file!")
+        message.setWindowTitle("Invalid path")
+        message.setStandardButtons(QMessageBox.Ok)
+        message.exec()
     
     def __reset(self):
         self.current_index = None
