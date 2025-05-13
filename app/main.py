@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import QApplication
-from app.presentation.home_widget import HomeWidget
+from app.presentation.home_window import HomeWindow
 
 def main():
     app = QApplication()
-    window = HomeWidget()
+    window = HomeWindow()
+    window.setWindowTitle("Logs reader")
     window.show()
     app.exec()
     

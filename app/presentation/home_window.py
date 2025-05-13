@@ -7,7 +7,7 @@ from app.data.read_log import read_log
 from app.presentation.log_list_model import LogListModel
 from app.data.http_indexes import Fields
 
-class HomeWidget(QMainWindow):
+class HomeWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = self.__load_ui()
