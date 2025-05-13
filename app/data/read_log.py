@@ -12,7 +12,7 @@ def read_log(path = os.path.join(os.path.dirname(__file__), "http_first_100k.log
         
             # timestamp (UTC time)
             ts = datetime.fromtimestamp(float(line_data[LOG_INDEXES[Fields.TIMESTAMP]]), tz = timezone.utc)
-            ts = ts.strftime("%Y-%m-%d %H:%M:%S")
+            # ts = ts.strftime("%Y-%m-%d %H:%M:%S")
             
             # uid 
             uid = line_data[LOG_INDEXES[Fields.UID]]
