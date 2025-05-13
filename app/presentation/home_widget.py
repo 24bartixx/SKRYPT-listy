@@ -88,7 +88,7 @@ class HomeWidget(QMainWindow):
         self.__populate_detail()
         
     def __populate_detail(self):
-        if self.current_index:
+        if self.current_index is not None:
             log = self.model.get_item(self.current_index)
             self.timestamp.setText(log[Fields.TIMESTAMP].strftime("%Y-%m-%d %H:%M:%S"))
             self.uid.setText(log[Fields.UID])
