@@ -1,0 +1,17 @@
+# Ignore virtual environment folder
+venv/
+.venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# MyPy type checker
+.mypy_cache/
+.dmypy.json
+dmypy.json
