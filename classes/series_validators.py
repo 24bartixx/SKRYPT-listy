@@ -121,20 +121,20 @@ class CompositeValidator(SeriesValidator):
         if self.mode == CompositeValidator.MODE.OR:
             
             heap: List[ValidatorMessage] = []
-            result: List[Tuple[datetime, str]]  = []
+            result: List[str]  = []
             
             for message_items in lists_to_sort:
                 heapq.heappush(heap, message_items.popleft())
                     
             while heap:
-                date, message, list_index = heapq.heappop(heap)
+                _, message, list_index = heapq.heappop(heap)
                 
                 if len(lists_to_sort[list_index]) > 0:
                     heapq.heappush(heap, lists_to_sort[list_index].popleft())
                 
-                result.append((date, message))
+                result.append(message)
                 
-            return [item[1] for item in result]
+            return [item for item in result]
                 
                     
         elif self.mode == CompositeValidator.MODE.AND:
