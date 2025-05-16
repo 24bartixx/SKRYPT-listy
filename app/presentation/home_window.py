@@ -127,18 +127,9 @@ class HomeWindow(QMainWindow):
         self.logs_list_view.scrollTo(index)
     
     def __updated_prev_next_button(self):
-        if self.current_index is None:
-            self.prev_button.setEnabled(False)
-            self.next_button.setEnabled(False)
-        else:
-            if self.current_index <= 0:
-                self.prev_button.setEnabled(False)
-            else:
-                self.prev_button.setEnabled(True)
-            if self.current_index + 1 >= len(self.display_data):
-                self.next_button.setEnabled(False)
-            else:
-                self.next_button.setEnabled(True)
+        has_index = self.current_index is not None
+        self.prev_button.setEnabled(has_index and self.current_index > 0)
+        self.next_button.setEnabled(has_index and self.current_index + 1 < len(self.display_data))
     
     def __show_path_error(self):
         message = QMessageBox()
