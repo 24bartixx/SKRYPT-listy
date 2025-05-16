@@ -101,6 +101,7 @@ class Measurements:
         anomalies: Dict[str, List[str]] = {}
 
         for validator in validators:
+            print(validator)
             validator_name: str = validator.__class__.__name__
             anomalies[validator_name] = []
 
