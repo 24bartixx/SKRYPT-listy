@@ -61,6 +61,9 @@ class TimeSeries:
                 elif value_date.date() > (param.date() if isinstance(param, datetime) else param):
                     break
                 
+            if len(result) == 0:
+                raise KeyError("No measurement found for the given date!")
+                
             return result
         
         else:
