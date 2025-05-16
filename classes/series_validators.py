@@ -34,7 +34,7 @@ class OutlierDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} on {series.dates[i]} exceeded standard deviation" 
             for i in range(len(series.values)) 
-            if isinstance(series.values[i], float) and abs(series.values[i] - mean) > stddev * self.k
+            if isinstance(value := series.values[i], float) and abs(value - mean) > stddev * self.k
         ]
         
     
@@ -48,7 +48,7 @@ class ThresholdDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} exceeded threshold {self.threshold} on {series.dates[i]}"
             for i in range(len(series.values))
-            if isinstance(series.values[i], float) and series.values[i] > self.threshold
+            if isinstance(value := series.values[i], float) and value > self.threshold
         ]
         
         
@@ -64,17 +64,17 @@ class ZeroSpikeDetector(SeriesValidator):
                 invalid.append(i)
             elif invalid:
                 if len(invalid) >= 3:
-                    msgs: List[str] = []
+                    invalid_msgs: List[str] = []
                     for j in invalid:
-                        msgs.append(f"({series.dates[j]}, {series.values[j]})")
-                    messages.append("Consecutive invalid values: " + ", ".join(msgs))
+                        invalid_msgs.append(f"({series.dates[j]}, {series.values[j]})")
+                    messages.append("Consecutive invalid values: " + ", ".join(invalid_msgs))
                 invalid = []
                 
         if len(invalid) >= 3:
-            msgs: List[str] = []
+            leftover_msgs: List[str] = []
             for i in invalid:
-                msgs.append(f"({series.dates[i]}, {series.values[i]})")
-            messages.append("Consecutive invalid values:"  + ", ".join(msgs))
+                leftover_msgs.append(f"({series.dates[i]}, {series.values[i]})")
+            messages.append("Consecutive invalid values:"  + ", ".join(leftover_msgs))
                 
         return messages
     
@@ -120,38 +120,38 @@ class CompositeValidator(SeriesValidator):
         
         if self.mode == CompositeValidator.MODE.OR:
             
-            heap: List[ValidatorMessage] = []
-            result: List[str]  = []
+            heap_or: List[ValidatorMessage] = []
+            result_or: List[str]  = []
             
             for message_items in lists_to_sort:
-                heapq.heappush(heap, message_items.popleft())
+                heapq.heappush(heap_or, message_items.popleft())
                     
-            while heap:
-                _, message, list_index = heapq.heappop(heap)
+            while heap_or:
+                _, message, list_index = heapq.heappop(heap_or)
                 
                 if len(lists_to_sort[list_index]) > 0:
-                    heapq.heappush(heap, lists_to_sort[list_index].popleft())
+                    heapq.heappush(heap_or, lists_to_sort[list_index].popleft())
                 
-                result.append(message)
+                result_or.append(message)
                 
-            return [item for item in result]
+            return [item for item in result_or]
                 
                     
         elif self.mode == CompositeValidator.MODE.AND:
         
-            heap: List[ValidatorMessage] = []
-            result: List[str]  = []
+            heap_and: List[ValidatorMessage] = []
+            result_and: List[str]  = []
             temp_messages: Set[str] = set()
             temp_date: Optional[datetime] = None
             
             for message_items in lists_to_sort:
-                heapq.heappush(heap, message_items.popleft())
+                heapq.heappush(heap_and, message_items.popleft())
                     
-            while heap:
-                date, message, list_index = heapq.heappop(heap)
+            while heap_and:
+                date, message, list_index = heapq.heappop(heap_and)
                 
                 if len(lists_to_sort[list_index]) > 0:
-                    heapq.heappush(heap, lists_to_sort[list_index].popleft())
+                    heapq.heappush(heap_and, lists_to_sort[list_index].popleft())
                 
                 if not temp_date or temp_date != date:
                     temp_messages = {message}
@@ -160,11 +160,11 @@ class CompositeValidator(SeriesValidator):
                     temp_messages.add(message)
                     
                 if len(temp_messages) == len(self.validators):
-                    result += list(temp_messages)
+                    result_and += list(temp_messages)
                     temp_messages = set()
                     temp_date = None
                         
-            return result
+            return result_and
         
         raise ValueError(f"Unsupported mode: {self.mode}")
                 

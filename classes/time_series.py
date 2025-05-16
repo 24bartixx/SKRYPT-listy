@@ -12,12 +12,12 @@ class TimeSeries:
         dates: List[Union[datetime, str]],
         values: List[Union[float, str]]
     ) -> None:
-        self.__indicator = indicator
-        self.__station_code = stations_code
-        self.__averaging_time = averaging_time
-        self.__unit = unit
-        self.__dates = dates
-        self.__values = values
+        self.__indicator: str = indicator
+        self.__station_code: str = stations_code
+        self.__averaging_time: str = averaging_time
+        self.__unit: str = unit
+        self.__dates: List[Union[datetime, str]] = dates
+        self.__values: List[Union[float, str]] = values
         
     def __str__(self) -> str:
         return (
@@ -32,7 +32,10 @@ class TimeSeries:
             f"\n\tLast 5 values: {[self.__values[i] for i in range(-3, 0)]}"
         )
         
-    def __getitem__(self, param) -> List[Tuple[Union[datetime, str], Union[float, str]]]:
+    def __getitem__(
+        self, 
+        param: Union[int, slice, Union[datetime, date]]
+    ) -> List[Tuple[Union[datetime, str], Union[float, str]]]:
         
         if isinstance(param, int):
             if param < -len(self.__dates) or param >= len(self.__dates):
@@ -46,16 +49,16 @@ class TimeSeries:
         
         elif isinstance(param, (datetime, date)):
             
-            result = []
+            result: List[Tuple[Union[datetime, str], Union[float, str]]] = []
             
             for value_date, value in zip(self.__dates, self.__values):
                 
-                if not isinstance(value_date, (datetime, date)):
+                if not isinstance(value_date, datetime):
                     continue
                 
-                if value_date.date() == param.date():
+                if value_date.date() == (param.date() if isinstance(param, datetime) else param):
                     result.append((value_date, value))
-                elif value_date.date() > param.date():
+                elif value_date.date() > (param.date() if isinstance(param, datetime) else param):
                     break
                 
             return result

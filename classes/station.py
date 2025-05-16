@@ -1,5 +1,5 @@
-from datetime import datetime
-from ..other.logger import logger
+from datetime import datetime, date
+from other.logger import logger
 from typing import Any, Optional, Union
 
 log = logger()
@@ -12,8 +12,8 @@ class Station:
         self.__international_code: Optional[str] = args[2] if len(args) > 2 else None
         self.__name: Optional[str] = args[3] if len(args) > 3 else None
         self.__old_station_code: Optional[str] = args[4] if len(args) > 4 else None
-        self.__open_date: Optional[Union[datetime, str]] = self.__convert_to_date(args[5]) if len(args) > 5 else None
-        self.__closure_date: Optional[Union[datetime, str]] = self.__convert_to_date(args[6]) if len(args) > 6 else None
+        self.__open_date: Optional[Union[date, str]] = self.__convert_to_date(args[5]) if len(args) > 5 else None
+        self.__closure_date: Optional[Union[date, str]] = self.__convert_to_date(args[6]) if len(args) > 6 else None
         self.__station_type: Optional[str] = args[7] if len(args) > 7 else None
         self.__area_type: Optional[str] = args[8] if len(args) > 8 else None
         self.__station_kind: Optional[str] = args[9] if len(args) > 9 else None
@@ -23,7 +23,7 @@ class Station:
         self.__latitude: Optional[float] = args[13] if len(args) > 13 else None
         self.__longitude: Optional[float] = args[14] if len(args) > 14 else None
 
-    def __convert_to_date(self, date: Optional[str]) -> Optional[Union[datetime, str]]:
+    def __convert_to_date(self, date: Optional[str]) -> Optional[Union[date, str]]:
         if not date:
             return None
         try:

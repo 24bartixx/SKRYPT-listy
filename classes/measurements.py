@@ -61,7 +61,7 @@ class Measurements:
         
         # IMPLEMENTATION 2 -> exploring content of the files
         for _, time_series in self.data_paths.items():
-            if time_series and time_series.indicator == parameter_name:
+            if time_series and any(series.indicator == parameter_name for series in time_series):
                 return True
             
         for path, time_series in self.data_paths.items():

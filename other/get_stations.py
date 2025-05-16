@@ -1,7 +1,7 @@
 import csv
-from ..classes.station import Station
+from classes.station import Station
 from pathlib import Path
-from logger import logger
+from other.logger import logger
 
 log = logger()
 
