@@ -60,7 +60,7 @@ class ZeroSpikeDetector(SeriesValidator):
         invalid: List[int]  = []
         
         for i in range(len(series.values)):
-            if not series.values[i] or not isinstance(series.values[i], float):
+            if not series.values[i] or not isinstance(series.values[i], Union[float, int]):
                 invalid.append(i)
             elif invalid:
                 if len(invalid) >= 3:
@@ -74,7 +74,7 @@ class ZeroSpikeDetector(SeriesValidator):
             leftover_msgs: List[str] = []
             for i in invalid:
                 leftover_msgs.append(f"({series.dates[i]}, {series.values[i]})")
-            messages.append("Consecutive invalid values:"  + ", ".join(leftover_msgs))
+            messages.append("Consecutive invalid values: "  + ", ".join(leftover_msgs))
                 
         return messages
     
