@@ -91,12 +91,12 @@ class TimeSeries:
         
     @property
     def mean(self) -> Optional[float]:
-        values = [value for value in self.__values if isinstance(value, float)]
+        values = [value for value in self.__values if isinstance(value, Union[float, int])]
         return mean(values) if values else None
 
     @property
     def stddev(self) -> float:
-        values = [value for value in self.__values if isinstance(value, float)]
+        values = [value for value in self.__values if isinstance(value, Union[float, int])]
         return stdev(values) if len(values) > 0 else 0.0
         
         

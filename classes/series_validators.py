@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional,Deque, Tuple, Set
+from typing import List, Optional,Deque, Tuple, Set, Union
 from classes.time_series import TimeSeries
 from datetime import datetime
 from enum import Enum
@@ -30,11 +30,11 @@ class OutlierDetector(SeriesValidator):
             return []
         
         stddev : float = series.stddev
-        
+          
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} on {series.dates[i]} exceeded standard deviation" 
             for i in range(len(series.values)) 
-            if isinstance(value := series.values[i], float) and abs(value - mean) > stddev * self.k
+            if isinstance(value := series.values[i], Union[float, int]) and abs(value - mean) > stddev * self.k
         ]
         
     
