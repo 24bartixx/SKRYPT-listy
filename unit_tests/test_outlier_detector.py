@@ -13,8 +13,19 @@ time_series = TimeSeries(
     values=values
 )
 
+empty_time_series = TimeSeries(
+    stations_code="station_code",
+    indicator="indicator",
+    averaging_time="averaging_time",
+    unit="unit",
+    dates=[],
+    values=[]
+)
+
 def test_outlier_detector():
-    result = OutlierDetector(1.2).analyze(time_series)
+    detector = OutlierDetector(1.2)
+    result = detector.analyze(time_series)
+    empty_result = detector.analyze(empty_time_series)
 
     assert isinstance(result, list)
     assert len(result) == 3
@@ -22,6 +33,7 @@ def test_outlier_detector():
     assert "Measurement indicator averaging_time with value -592 on 2025-05-01 00:00:00 exceeded standard deviation" in result
     assert "Measurement indicator averaging_time with value 610.32 on 2025-05-12 00:00:00 exceeded standard deviation" in result
     
-    
+    assert isinstance(empty_result, list)
+    assert len(empty_result) == 0
     
     

@@ -20,16 +20,17 @@ class TimeSeries:
         self.__values: List[Union[float, str]] = values
         
     def __str__(self) -> str:
+        first_count = min(len(self.__dates), 5)
         return (
             "Station"
             f"\n\tIndicator: {self.__indicator}"
             f"\n\tStation code: {self.__station_code}"
             f"\n\tAveraging time: {self.__averaging_time}"
             f"\n\tUnit: {self.__unit}"
-            f"\n\tFirst 5 dates: {[self.__dates[i] for i in range(3)]}"
-            f"\n\tFirst 5 values: {[self.__values[i] for i in range(3)]}"
-            f"\n\tLast 5 dates: {[self.__dates[i] for i in range(-3, 0)]}"
-            f"\n\tLast 5 values: {[self.__values[i] for i in range(-3, 0)]}"
+            f"\n\tFirst {first_count} dates: {[self.__dates[i] for i in range(first_count)]}"
+            f"\n\tFirst {first_count} values: {[self.__values[i] for i in range(first_count)]}"
+            f"\n\tLast {first_count} dates: {[self.__dates[i] for i in range(-first_count, 0)]}"
+            f"\n\tLast {first_count} values: {[self.__values[i] for i in range(-first_count, 0)]}"
         )
         
     def __getitem__(

@@ -1,8 +1,8 @@
 from datetime import datetime
-from classes.series_validators import ZeroSpikeDetector
+from classes.series_validators import ThresholdDetector
 from classes.time_series import TimeSeries
 
-values = [0.342, 0.1345, 1.34, None, 0, None, None, 0, 1, 0, 0, 0, 0.15, 0.196, None, None, None, 0.51]
+values = [10, 532.23, 15.513, 0.314, 5, 7.4, 100.5, -14.25]
     
 time_series = TimeSeries(
     stations_code="station_code",
@@ -23,15 +23,17 @@ empty_time_series = TimeSeries(
 )
 
 def test_zero_spike_detector():
-    detector = ZeroSpikeDetector()
+    detector = ThresholdDetector(9)
     result = detector.analyze(time_series)
     empty_result = detector.analyze(empty_time_series)
     
     assert isinstance(result, list)
-    assert len(result) == 3
-    assert "Consecutive invalid values: (2025-05-04 00:00:00, None), (2025-05-05 00:00:00, 0), (2025-05-06 00:00:00, None), (2025-05-07 00:00:00, None), (2025-05-08 00:00:00, 0)"
-    assert "Consecutive invalid values: (2025-05-10 00:00:00, 0), (2025-05-11 00:00:00, 0), (2025-05-12 00:00:00, 0)"
-    assert "Consecutive invalid values: (2025-05-15 00:00:00, None), (2025-05-16 00:00:00, None), (2025-05-17 00:00:00, None)"
+    assert len(result) == 4
+    assert "Measurement indicator averaging_time with value 10 exceeded threshold 9 on 2025-05-01 00:00:00" in result
+    assert "Measurement indicator averaging_time with value 532.23 exceeded threshold 9 on 2025-05-02 00:00:00" in result
+    assert "Measurement indicator averaging_time with value 15.513 exceeded threshold 9 on 2025-05-03 00:00:00" in result
+    assert "Measurement indicator averaging_time with value 100.5 exceeded threshold 9 on 2025-05-07 00:00:00" in result
     
     assert isinstance(empty_result, list)
     assert len(empty_result) == 0
+    

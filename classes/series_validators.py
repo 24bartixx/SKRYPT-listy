@@ -25,10 +25,10 @@ class OutlierDetector(SeriesValidator):
     
     def analyze(self, series: TimeSeries) -> List[str]:
         
-        mean : Optional[float] = series.mean
-        if mean is None:
+        if len(series.values) == 0:
             return []
         
+        mean : Optional[float] = series.mean
         stddev : float = series.stddev
           
         return [
@@ -48,7 +48,7 @@ class ThresholdDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} exceeded threshold {self.threshold} on {series.dates[i]}"
             for i in range(len(series.values))
-            if isinstance(value := series.values[i], float) and value > self.threshold
+            if isinstance(value := series.values[i], Union[float, int]) and value > self.threshold
         ]
         
         
