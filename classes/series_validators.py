@@ -30,11 +30,14 @@ class OutlierDetector(SeriesValidator):
         
         mean : Optional[float] = series.mean
         stddev : float = series.stddev
+        
+        if mean is None:
+            return []
           
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} on {series.dates[i]} exceeded standard deviation" 
             for i in range(len(series.values)) 
-            if isinstance(value := series.values[i], Union[float, int]) and abs(value - mean) > stddev * self.k
+            if isinstance(value := series.values[i], (float, int)) and abs(value - mean) > stddev * self.k
         ]
         
     
@@ -48,7 +51,7 @@ class ThresholdDetector(SeriesValidator):
         return [
             f"Measurement {series.indicator} {series.averaging_time} with value {series.values[i]} exceeded threshold {self.threshold} on {series.dates[i]}"
             for i in range(len(series.values))
-            if isinstance(value := series.values[i], Union[float, int]) and value > self.threshold
+            if isinstance(value := series.values[i], (float, int)) and value > self.threshold
         ]
         
         
@@ -60,7 +63,7 @@ class ZeroSpikeDetector(SeriesValidator):
         invalid: List[int]  = []
         
         for i in range(len(series.values)):
-            if not series.values[i] or not isinstance(series.values[i], Union[float, int]):
+            if not series.values[i] or not isinstance(series.values[i], (float, int)):
                 invalid.append(i)
             elif invalid:
                 if len(invalid) >= 3:

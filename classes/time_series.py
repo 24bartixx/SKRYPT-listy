@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from statistics import mean, stdev
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Sequence
 
 class TimeSeries:
     def __init__(
@@ -9,15 +9,15 @@ class TimeSeries:
         indicator: str,
         averaging_time: str,
         unit: str,
-        dates: List[Union[datetime, str]],
-        values: List[Union[float, str]]
+        dates: Sequence[Union[datetime, str]],
+        values: Sequence[Union[float, str, None]]
     ) -> None:
         self.__indicator: str = indicator
         self.__station_code: str = stations_code
         self.__averaging_time: str = averaging_time
         self.__unit: str = unit
-        self.__dates: List[Union[datetime, str]] = dates
-        self.__values: List[Union[float, str]] = values
+        self.__dates: List[Union[datetime, str]] = list(dates)
+        self.__values: List[Union[float, str, None]] = list(values)
         
     def __str__(self) -> str:
         first_count = min(len(self.__dates), 5)
@@ -36,7 +36,7 @@ class TimeSeries:
     def __getitem__(
         self, 
         param: Union[int, slice, Union[datetime, date]]
-    ) -> List[Tuple[Union[datetime, str], Union[float, str]]]:
+    ) -> List[Tuple[Union[datetime, str, None], Union[float, str, None]]]:
         
         if isinstance(param, int):
             if param < -len(self.__dates) or param >= len(self.__dates):
@@ -50,7 +50,7 @@ class TimeSeries:
         
         elif isinstance(param, (datetime, date)):
             
-            result: List[Tuple[Union[datetime, str], Union[float, str]]] = []
+            result: List[Tuple[Union[datetime, str, None], Union[float, str, None]]] = []
             
             for value_date, value in zip(self.__dates, self.__values):
                 
@@ -83,7 +83,7 @@ class TimeSeries:
         return self.__averaging_time
         
     @property
-    def values(self) -> List[Union[float, str]]:
+    def values(self) -> List[Union[float, str, None]]:
         return self.__values
         
     @property
@@ -92,12 +92,12 @@ class TimeSeries:
         
     @property
     def mean(self) -> Optional[float]:
-        values = [value for value in self.__values if isinstance(value, Union[float, int])]
+        values = [value for value in self.__values if isinstance(value, (float, int))]
         return mean(values) if values else None
 
     @property
     def stddev(self) -> float:
-        values = [value for value in self.__values if isinstance(value, Union[float, int])]
+        values = [value for value in self.__values if isinstance(value, (float, int))]
         return stdev(values) if len(values) > 0 else 0.0
         
         
